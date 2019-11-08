@@ -1,0 +1,2 @@
+python APBroadCast.py 10.0.0.1 AP-wlan0 '[10.0.0.2,10.0.0.3,10.0.0.4]' 1 #AP广播命令
+python receive.py 10.0.0.2 RU-wlan0
