@@ -5,7 +5,7 @@ from mn_wifi.link import wmediumd, adhoc
 from mn_wifi.cli import CLI_wifi
 from mn_wifi.net import Mininet_wifi
 from mn_wifi.wmediumdConnector import interference
-from EH.newenergy import energy
+from EH.energy import energy
 from Params.params import getDistance
 import numpy as np
 np.set_printoptions(suppress=True)

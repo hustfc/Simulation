@@ -16,7 +16,7 @@ def energy(sta, ap, time):
     # num = str(sta)[2]
     apPosition = ap.params['position'][0:2]
     distance = math.sqrt((staPosition[0] - apPosition[0]) ** 2 + (staPosition[1] - apPosition[1]) ** 2)
-    # info('distance : %.2f m\n' % distance)
+    info('distance : %.2f m\n' % distance)
     # txpower = float(ap.params['txpower'][0]) #根据基站的发射功率计算能量收集
     # info('txpower: %.3f dbm\n' % txpower)  #dbm转化成w
     
@@ -31,10 +31,10 @@ def energy(sta, ap, time):
     while t <= time:
         h = random.normal(0, 1)
         receivePower = transmitPower * (distance ** (-alpha)) * (h ** 2)
-        print('receive power',receivePower)
+        # print('receive power',receivePower)
         receiveEnergy += receivePower * interval
         t += interval
-    # info('after %fs receive energy : %fJ\n' % (time, receiveEnergy))
+    info('after %fs receive energy : %fJ\n' % (time, receiveEnergy))
     pow = float(receiveEnergy)
     return pow
     # filename = "/home/shlled/mininet-project-duan/TimeSchedule/Log/DU%c.json" % num

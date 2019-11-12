@@ -17,7 +17,7 @@ def topology():
     sta5 = net.addStation('sta5', position='13,5,0', ip='10.0.0.5', mac='00:00:00:00:00:05', range=5)
     sta6 = net.addStation('sta6', position='15,5,0', ip='10.0.0.6', mac='00:00:00:00:00:06', range=5)
     client = net.addStation('client', position='9,2,0', ip='10.0.0.7', mac='00:00:00:00:00:07', range=5)
-    ap1 = net.addAccessPoint('ap1', ssid='ssid-ap1', mode='g', channel='1', position='10,10,0', range=40)
+    ap1 = net.addAccessPoint('ap1', ssid='ssid-ap1', mode='g', channel='1', position='37,5,0', range=40)
 
     c1 = net.addController('c1')
 
@@ -43,7 +43,7 @@ def topology():
     ap1.start([c1])
 
     info('*** Energy Harvest\n')
-    energy(sta1, ap1, 10)
+    energy(sta1, ap1, 0.011)
     info('***\n')
 
     info("*** Running CLI\n")
