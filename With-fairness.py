@@ -63,8 +63,6 @@ def topology():
     net = Mininet_wifi(controller=Controller, link=wmediumd,
                        wmediumd_mode=interference)
     #设备初始化
-    ap1 = net.addAccessPoint('ap1', ssid="ap1-ssid", mode="g",
-                             channel="1", position='5,6,0',range=40)
     AP = net.addStation('AP', position='5,10,0', ip='10.1.0.1', mac='00:00:00:00:00:EE') 
 
     UES = []
@@ -87,6 +85,7 @@ def topology():
 
     info("*** Configuring wifi nodes\n")
     net.configureWifiNodes()
+    net.plotGraph(max_x=100, max_y=100)
 
     info("*** Adding Link\n")
     net.addLink(AP, cls=adhoc, ssid='adhocNet', mode='g', channel=5, ht_cap='HT40+')
@@ -96,7 +95,6 @@ def topology():
     info("*** Starting network\n")
     net.build()
     c0.start()
-    ap1.start([c0])
     #设备初始化完毕，开始进行调度
     "总共进行20轮数据传输"
     Total_r = 20
@@ -251,6 +249,7 @@ def topology():
     plt.show()
     info("*** Fairness")
     print(fair_result)
+
     info("*** Running CLI\n")
     CLI_wifi(net)
 
