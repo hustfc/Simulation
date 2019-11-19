@@ -21,11 +21,11 @@ def energy(sta, ap, time):
     # info('txpower: %.3f dbm\n' % txpower)  #dbm转化成w
     
     #transmitPower = 10 ** (txpower / 10) / 1000
-    transmitPower = 20 #基站的发射功率
+    transmitPower = 1000 #基站的发射功率
 
     # info('transmitPower: %f W\n' % transmitPower) 
     
-    alpha = 2.0
+    alpha = 3
     t, receiveEnergy = 0, 0
     interval = 0.0001
     while t <= time:
@@ -37,11 +37,3 @@ def energy(sta, ap, time):
     info('after %fs receive energy : %fJ\n' % (time, receiveEnergy))
     pow = float(receiveEnergy)
     return pow
-    # filename = "/home/shlled/mininet-project-duan/TimeSchedule/Log/DU%c.json" % num
-    # with open(filename,'r+') as f:
-    #     buffer = f.readlines()
-    #     lenth = len(buffer)            
-    #     data = json.loads(buffer[-1])
-    #     data["POWER"] += pow
-    #     json.dump(data,f)
-    #     f.write("\n")
