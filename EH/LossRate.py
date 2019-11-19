@@ -40,6 +40,11 @@ def LossRate_FDS_RU(Rk):
     print("距离: ", Rk, " ,比特误码率: ", (1 - BSR), " ,丢包率:", PLR * 100, "%")
 
 RKS = list(range(41))
+
+print("基站到雾设备的丢包率")
+for i in RKS:
+    LossRate_BS_FDS(i)
+print("雾设备到RU的丢包率")
 for i in RKS:
     LossRate_FDS_RU(i)
 
