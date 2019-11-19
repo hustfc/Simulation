@@ -16,7 +16,7 @@ import json
 import random
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.rcParams.update({'font.size': 16}) # 改变所有字体大小，改变其他性质类似
+matplotlib.rcParams.update({'font.size': 10}) # 改变所有字体大小，改变其他性质类似
 from NewGame import game
 from fairness import Fairness
 
@@ -70,9 +70,10 @@ def topology():
     RU = net.addStation("RU", position='80,20,0', ip='10.10.0.0', range=200)
 
     UES = []
+
     for i in range(1,21):
         #创建中继设备节点
-        temphost = net.addStation('DU%d'%i, position='%d,5,0'%(i+37), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
+        temphost = net.addStation('DU%d'%i, position='%d,%d,0'%(random.randint(10, 75),random.randint(25,85)), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
         #创建中继设备类对象
         temp = UE(temphost,'UE%d'%i,'10.0.0.%d'%i, 'DU%d-wlan0' %i,0.05+0.03*i,i) #丢包率已经初始化完毕
         UES.append(temp)
