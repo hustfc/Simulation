@@ -7,6 +7,7 @@ from mn_wifi.net import Mininet_wifi
 from mn_wifi.wmediumdConnector import interference
 from EH.energy import energy
 from Params.params import getDistance
+
 import numpy as np
 np.set_printoptions(suppress=True)
 import thread
@@ -19,6 +20,8 @@ import matplotlib.pyplot as plt
 matplotlib.rcParams.update({'font.size': 10}) # 改变所有字体大小，改变其他性质类似
 from NewGame import game
 from fairness import Fairness
+from EH.LossRate import LossRate_FDS_RU
+
 
 "线程函数"
 def command(host, arg):
@@ -61,6 +64,7 @@ class UE:
         self.rank = 0
         self.powhis = [self.Power]
         UE.count += 1
+
 def topology():
     #创建网络和设备初始化
     net = Mininet_wifi(controller=Controller, link=wmediumd,
@@ -71,16 +75,18 @@ def topology():
 
     UES = []
 
-    for i in range(1,21):
+    for i in range(0,20):
         #创建中继设备节点
         temphost = net.addStation('DU%d'%i, position='%d,%d,0'%(random.randint(3, 45),random.randint(3,45)), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
         #创建中继设备类对象
-        temp = UE(temphost,'UE%d'%i,'10.0.0.%d'%i, 'DU%d-wlan0' %i,0.05+0.03*i,i) #丢包率已经初始化完毕
+        # temp = UE(temphost,'UE%d'%i,'10.0.0.%d'%i, 'DU%d-wlan0' %i,0.05+0.03*i,i) #丢包率已经初始化完毕
+        # 根据位置确定丢包率
+        temp = UE(temphost, 'UE%d' % i, '10.0.0.%d' % i, 'DU%d-wlan0' % i, LossRate_FDS_RU(temphost, RU), i)
         UES.append(temp)
     
     #打印出设备池中的设备信息
-    # for i in range(0,20):
-    #     print(UES[i].name,UES[i].ip,UES[i].port,UES[i].Power,'\n')
+    for i in range(0,20):
+        print(UES[i].name,UES[i].ip,UES[i].port,UES[i].link_e, UES[i].Power,'\n')
     
 
     c0 = net.addController('c0')
@@ -255,14 +261,13 @@ def topology():
     plt.ylabel('Power(J)')
     # # 挑选比较有代表性的
     for i in range(0,len(UES)):
-        if i in [0,1,2,3,11,19]:
-            print("the power history of %d-th is"% UES[i].num, UES[i].powhis)
-            data_x = [j for j in range(0,len(UES[i].powhis))]
-            # round_x = range(len(UES[j].powhis))
-            data_y = UES[i].powhis
-            labelx = range(0,21)
-            plt.xticks(data_x,labelx,fontsize = 14)
-            plt.plot(data_x,data_y,marker = '*',label='%d-th'%UES[i].num)
+        print("the power history of %d-th is"% UES[i].num, UES[i].powhis)
+        data_x = [j for j in range(0,len(UES[i].powhis))]
+        # round_x = range(len(UES[j].powhis))
+        data_y = UES[i].powhis
+        labelx = range(0,21)
+        plt.xticks(data_x,labelx,fontsize = 14)
+        plt.plot(data_x,data_y,marker = '*',label='%d-th'%UES[i].num)
     plt.legend()
     # plt.sh
     
