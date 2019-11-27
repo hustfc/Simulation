@@ -23,7 +23,6 @@ def LossRate_BS_FDS(Rk):
 def LossRate_FDS_RU(Rk):
     y = Symbol('y')
     a = 3
-    #Rk = 1
     f1 = y ** (2 / a - 1) * exp(-y)
     f2 = y ** (-2 / a) * exp(-y)
     I1 = integrate(f1, (y, 0, +oo))
