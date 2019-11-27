@@ -46,7 +46,7 @@ class MyThread(threading.Thread):
 如何更新信息
 
 '''
-random.seed(1)
+random.seed(2)
 class UE:
     count = 0
     def __init__(self, host, name, ip, port, link_e, num, gains=0.0, F_BS=0.0, F_UE=0.0, N1=0.0, b=0.0, Power = 0, flag=False):
@@ -66,14 +66,14 @@ def topology():
     net = Mininet_wifi(controller=Controller, link=wmediumd,
                        wmediumd_mode=interference)
     #设备初始化
-    AP = net.addStation('AP', position='1,90,0', ip='10.1.0.1', mac='00:00:00:00:00:EE', range=200)
-    RU = net.addStation("RU", position='80,20,0', ip='10.10.0.0', range=200)
+    AP = net.addStation('AP', position='3,48,0', ip='10.1.0.1', mac='00:00:00:00:00:EE')
+    RU = net.addStation("RU", position='48,3,0', ip='10.10.0.0')
 
     UES = []
 
     for i in range(1,21):
         #创建中继设备节点
-        temphost = net.addStation('DU%d'%i, position='%d,%d,0'%(random.randint(10, 75),random.randint(25,85)), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
+        temphost = net.addStation('DU%d'%i, position='%d,%d,0'%(random.randint(3, 45),random.randint(3,45)), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
         #创建中继设备类对象
         temp = UE(temphost,'UE%d'%i,'10.0.0.%d'%i, 'DU%d-wlan0' %i,0.05+0.03*i,i) #丢包率已经初始化完毕
         UES.append(temp)
@@ -90,7 +90,7 @@ def topology():
 
     info("*** Configuring wifi nodes\n")
     net.configureWifiNodes()
-    net.plotGraph(max_x=100, max_y=100)
+    net.plotGraph(max_x=50, max_y=50)
 
     info("*** Adding Link\n")
     net.addLink(AP, cls=adhoc, ssid='adhocNet', mode='g', channel=5, ht_cap='HT40+')
@@ -156,7 +156,7 @@ def topology():
         #开始发送信息
         num = 0
         while num<20:
-            if (queue[num].N1*0.00004) < queue[num].Power:
+            if (queue[num].N1*0.000004) < queue[num].Power:
                 print('the %d-th device has been selected' % num)
                 TotalTime = 10 #时间片大小
                 # FileIndex = 0 #发送文件位置
@@ -208,7 +208,8 @@ def topology():
                 FBS.append(queue[num].F_BS)
                 FFD.append(queue[num].F_UE)
 
-                queue[num].Power -= queue[num].N1*0.00004
+                # 传输包的数目乘以传输一个数据包所需要的能量
+                queue[num].Power -= queue[num].N1*0.000004
                 queue[num].gains += queue[num].F_UE
                 print("在第%d轮中，各中继设备的状态信息" % round)
                 for k in range(0,20):
@@ -263,7 +264,7 @@ def topology():
             plt.xticks(data_x,labelx,fontsize = 14)
             plt.plot(data_x,data_y,marker = '*',label='%d-th'%UES[i].num)
     plt.legend()
-    # plt.show()
+    # plt.sh
     
     
     #绘制被选择的中继设备编号和基站和各中继设备的效益图
@@ -271,9 +272,9 @@ def topology():
     round = [k for k in range(0,20)]
     plt.plot(round, FBS, marker='o', label="$U_{BS}$")
     plt.plot(round, FFD, marker='*', label="$U_{FD}$")
-    # for i in range(0,len(UES)):
-    #     plt.annotate(NFD[i], (round[i], FBS[i]))
-    #     plt.annotate(NFD[i], (round[i], FFD[i]))
+    for i in range(0,len(UES)):
+        plt.annotate(NFD[i], (round[i], FBS[i]))
+        plt.annotate(NFD[i], (round[i], FFD[i]))
     labelx = range(1,21)
     plt.xticks(round,labelx,fontsize = 14)
     plt.xlabel('round')

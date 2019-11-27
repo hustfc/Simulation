@@ -10,14 +10,14 @@ def topology():
     net = Mininet_wifi(link=wmediumd, wmediumd_mode=interference)
 
     info("*** Creating nodes\n")
-    sta1 = net.addStation('sta1', position='5,5,0', ip='10.0.0.1', mac='00:00:00:00:00:01', range=5)
-    sta2 = net.addStation('sta2', position='7,5,0', ip='10.0.0.2', mac='00:00:00:00:00:02', range=5)
-    sta3 = net.addStation('sta3', position='9,5,0', ip='10.0.0.3', mac='00:00:00:00:00:03', range=5)
-    sta4 = net.addStation('sta4', position='11,5,0', ip='10.0.0.4', mac='00:00:00:00:00:04', range=5)
-    sta5 = net.addStation('sta5', position='13,5,0', ip='10.0.0.5', mac='00:00:00:00:00:05', range=5)
-    sta6 = net.addStation('sta6', position='15,5,0', ip='10.0.0.6', mac='00:00:00:00:00:06', range=5)
+    sta1 = net.addStation('sta1', position='5,0,0', ip='10.0.0.1', mac='00:00:00:00:00:01', range=5)
+    sta2 = net.addStation('sta2', position='30,0,0', ip='10.0.0.2', mac='00:00:00:00:00:02', range=5)
+    sta3 = net.addStation('sta3', position='50,0,0', ip='10.0.0.3', mac='00:00:00:00:00:03', range=5)
+    sta4 = net.addStation('sta4', position='90,0,0', ip='10.0.0.4', mac='00:00:00:00:00:04', range=5)
+    sta5 = net.addStation('sta5', position='120,0,0', ip='10.0.0.5', mac='00:00:00:00:00:05', range=5)
+    sta6 = net.addStation('sta6', position='150,0,0', ip='10.0.0.6', mac='00:00:00:00:00:06', range=5)
     client = net.addStation('client', position='9,2,0', ip='10.0.0.7', mac='00:00:00:00:00:07', range=5)
-    ap1 = net.addAccessPoint('ap1', ssid='ssid-ap1', mode='g', channel='1', position='37,5,0', range=40)
+    ap1 = net.addAccessPoint('ap1', ssid='ssid-ap1', mode='g', channel='1', position='0,0,0', range=40)
 
     c1 = net.addController('c1')
 
@@ -44,6 +44,11 @@ def topology():
 
     info('*** Energy Harvest\n')
     energy(sta1, ap1, 0.011)
+    energy(sta2, ap1, 0.011)
+    energy(sta3, ap1, 0.011)
+    energy(sta4, ap1, 0.011)
+    energy(sta5, ap1, 0.011)
+    energy(sta6, ap1, 0.011)
     info('***\n')
 
     info("*** Running CLI\n")
