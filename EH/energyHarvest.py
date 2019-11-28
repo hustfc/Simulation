@@ -11,11 +11,11 @@ def topology():
 
     info("*** Creating nodes\n")
     sta1 = net.addStation('sta1', position='5,0,0', ip='10.0.0.1', mac='00:00:00:00:00:01', range=5)
-    sta2 = net.addStation('sta2', position='30,0,0', ip='10.0.0.2', mac='00:00:00:00:00:02', range=5)
-    sta3 = net.addStation('sta3', position='50,0,0', ip='10.0.0.3', mac='00:00:00:00:00:03', range=5)
-    sta4 = net.addStation('sta4', position='90,0,0', ip='10.0.0.4', mac='00:00:00:00:00:04', range=5)
-    sta5 = net.addStation('sta5', position='120,0,0', ip='10.0.0.5', mac='00:00:00:00:00:05', range=5)
-    sta6 = net.addStation('sta6', position='150,0,0', ip='10.0.0.6', mac='00:00:00:00:00:06', range=5)
+    sta2 = net.addStation('sta2', position='10,0,0', ip='10.0.0.2', mac='00:00:00:00:00:02', range=5)
+    sta3 = net.addStation('sta3', position='20,0,0', ip='10.0.0.3', mac='00:00:00:00:00:03', range=5)
+    sta4 = net.addStation('sta4', position='30,0,0', ip='10.0.0.4', mac='00:00:00:00:00:04', range=5)
+    sta5 = net.addStation('sta5', position='45,0,0', ip='10.0.0.5', mac='00:00:00:00:00:05', range=5)
+    sta6 = net.addStation('sta6', position='60,0,0', ip='10.0.0.6', mac='00:00:00:00:00:06', range=5)
     client = net.addStation('client', position='9,2,0', ip='10.0.0.7', mac='00:00:00:00:00:07', range=5)
     ap1 = net.addAccessPoint('ap1', ssid='ssid-ap1', mode='g', channel='1', position='0,0,0', range=40)
 
@@ -42,13 +42,14 @@ def topology():
     c1.start()
     ap1.start([c1])
 
+    time = 0.03125
     info('*** Energy Harvest\n')
-    energy(sta1, ap1, 0.3125)
-    energy(sta2, ap1, 0.3125)
-    energy(sta3, ap1, 0.3125)
-    energy(sta4, ap1, 0.3125)
-    energy(sta5, ap1, 0.3125)
-    energy(sta6, ap1, 0.3125)
+    energy(sta1, ap1, time)
+    energy(sta2, ap1, time)
+    energy(sta3, ap1, time)
+    energy(sta4, ap1, time)
+    energy(sta5, ap1, time)
+    energy(sta6, ap1, time)
     info('***\n')
 
     info("*** Running CLI\n")

@@ -162,7 +162,7 @@ def topology():
         #开始发送信息
         num = 0
         while num<20:
-            if (queue[num].N1*0.000004) < queue[num].Power:
+            if (queue[num].N1*0.00004) < queue[num].Power:
                 print('the %d-th device has been selected' % num)
                 TotalTime = 10 #时间片大小
                 # FileIndex = 0 #发送文件位置
@@ -192,11 +192,11 @@ def topology():
                                 pass
                             else:
                                 
-                                egy = energy(UES[j].host, AP, 0.011/TotalTime)
+                                egy = energy(UES[j].host, AP, 0.03125/TotalTime)
                                 UES[j].Power += egy #第j个设备收集能量
                             # UES[j].powhis.append(egy)
                         else:
-                            egy = energy(UES[j].host, AP, 0.011/TotalTime)
+                            egy = energy(UES[j].host, AP, 0.03125/TotalTime)
                             UES[j].Power += egy #第j个设备收集能量
                     # for i in range(0,20):
                     #     print(queue[i].Power,'\n')   
@@ -215,7 +215,7 @@ def topology():
                 FFD.append(queue[num].F_UE)
 
                 # 传输包的数目乘以传输一个数据包所需要的能量
-                queue[num].Power -= queue[num].N1*0.000004
+                queue[num].Power -= queue[num].N1*0.00004
                 queue[num].gains += queue[num].F_UE
                 print("在第%d轮中，各中继设备的状态信息" % round)
                 for k in range(0,20):
@@ -261,13 +261,14 @@ def topology():
     plt.ylabel('Power(J)')
     # # 挑选比较有代表性的
     for i in range(0,len(UES)):
-        print("the power history of %d-th is"% UES[i].num, UES[i].powhis)
-        data_x = [j for j in range(0,len(UES[i].powhis))]
-        # round_x = range(len(UES[j].powhis))
-        data_y = UES[i].powhis
-        labelx = range(0,21)
-        plt.xticks(data_x,labelx,fontsize = 14)
-        plt.plot(data_x,data_y,marker = '*',label='%d-th'%UES[i].num)
+        if i in [4, 16, 15]:
+            print("the power history of %d-th is"% UES[i].num, UES[i].powhis)
+            data_x = [j for j in range(0,len(UES[i].powhis))]
+            # round_x = range(len(UES[j].powhis))
+            data_y = UES[i].powhis
+            labelx = range(0,21)
+            plt.xticks(data_x,labelx,fontsize = 14)
+            plt.plot(data_x,data_y,marker = '*',label='%d-th'%UES[i].num)
     plt.legend()
     # plt.sh
     
