@@ -43,12 +43,12 @@ def topology():
     ap1.start([c1])
 
     info('*** Energy Harvest\n')
-    energy(sta1, ap1, 0.011)
-    energy(sta2, ap1, 0.011)
-    energy(sta3, ap1, 0.011)
-    energy(sta4, ap1, 0.011)
-    energy(sta5, ap1, 0.011)
-    energy(sta6, ap1, 0.011)
+    energy(sta1, ap1, 0.3125)
+    energy(sta2, ap1, 0.3125)
+    energy(sta3, ap1, 0.3125)
+    energy(sta4, ap1, 0.3125)
+    energy(sta5, ap1, 0.3125)
+    energy(sta6, ap1, 0.3125)
     info('***\n')
 
     info("*** Running CLI\n")
