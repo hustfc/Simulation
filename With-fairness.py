@@ -16,10 +16,12 @@ import json
 import random
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.rcParams.update({'font.size': 16}) # 改变所有字体大小，改变其他性质类似
+matplotlib.rcParams.update({'font.size': 10}) # 改变所有字体大小，改变其他性质类似
 from NewGame import game
 from fairness import Fairness
 from RankByNSGA import Rank
+from EH.LossRate import LossRate_FDS_RU
+
 
 "线程函数"
 def command(host, arg):
@@ -42,7 +44,7 @@ class MyThread(threading.Thread):
         except Exception:
             return None
 #设备类，存储设备的信息
-random.seed(1)
+random.seed(2)
 
 class UE:
     count = 0
@@ -63,19 +65,27 @@ def topology():
     net = Mininet_wifi(controller=Controller, link=wmediumd,
                        wmediumd_mode=interference)
     #设备初始化
-    AP = net.addStation('AP', position='5,10,0', ip='10.1.0.1', mac='00:00:00:00:00:EE') 
+    AP = net.addStation('AP', position='3,48,0', ip='10.1.0.1', mac='00:00:00:00:00:EE')
+    RU = net.addStation("RU", position='48,3,0', ip='10.10.0.0')
+
 
     UES = []
-    for i in range(1,21):
-        #创建中继设备节点
-        temphost = net.addStation('DU%d'%i, position='%d,5,0'%(i+37), ip='10.0.0.%d'%i, mac='00:00:00:00:00:%02d'%i)
-        #创建中继设备类对象
-        temp = UE(temphost,'UE%d'%i,'10.0.0.%d'%i, 'DU%d-wlan0' %i, 0.05+0.03*i, i) #丢包率已经初始化完毕
+
+    # 雾设备节点的位置
+    positions = [
+        [2, 38], [4, 25], [5, 4], [7, 43], [9, 13], [10, 35], [13, 28], [16, 32], [20, 20], [23, 30],
+        [25, 5], [26, 15], [32, 35], [33, 9], [38, 41], [40, 23], [42, 34], [42, 2], [44, 16], [46, 9]
+    ]
+    for i in range(1, 21):
+        # 创建中继设备节点
+        temphost = net.addStation('DU%d' % i, position='%d,%d,0' % (positions[i - 1][0], positions[i - 1][1]),
+                                  ip='10.0.0.%d' % i, mac='00:00:00:00:00:%02d' % i)
+        temp = UE(temphost, 'UE%d' % i, '10.0.0.%d' % i, 'DU%d-wlan0' % i, LossRate_FDS_RU(temphost, RU), i)
         UES.append(temp)
     
     #打印出设备池中的设备信息
-    # for i in range(0,20):
-    #     print(UES[i].name,UES[i].ip,UES[i].port,UES[i].Power,'\n')
+    for i in range(0,20):
+        print(UES[i].name,UES[i].ip,UES[i].port,UES[i].Power,'\n')
     
 
     c0 = net.addController('c0')
@@ -85,7 +95,7 @@ def topology():
 
     info("*** Configuring wifi nodes\n")
     net.configureWifiNodes()
-    net.plotGraph(max_x=100, max_y=100)
+    net.plotGraph(max_x=50, max_y=50)
 
     info("*** Adding Link\n")
     net.addLink(AP, cls=adhoc, ssid='adhocNet', mode='g', channel=5, ht_cap='HT40+')
@@ -127,8 +137,11 @@ def topology():
                 del queue[l]
             else:
                 l += 1
-
+        print("rank之前")
+        # overhead
         num = Rank(UES,queue)
+        print("rank之后")
+
         #记录每一轮的收益变化情况
         NFD.append(queue[num].num)
         FBS.append(queue[num].F_BS)
@@ -165,11 +178,11 @@ def topology():
                         if key1 in range(1,top1):
                             pass
                         else:      
-                            egy = energy(UES[j].host, AP, 0.011/TotalTime)
+                            egy = energy(UES[j].host, AP, 0.03125/TotalTime)
                             UES[j].Power += egy #第j个设备收集能量
                         # UES[j].powhis.append(egy)
                     else:
-                        egy = energy(UES[j].host, AP, 0.011/TotalTime)
+                        egy = energy(UES[j].host, AP, 0.03125/TotalTime)
                         UES[j].Power += egy #第j个设备收集能量
                                                    
             #被选中的中继设备将传输满足博弈均衡的有效信息量给请求的客户端设备
@@ -218,7 +231,7 @@ def topology():
     plt.xlabel('round')
     plt.ylabel('Power(J)')
     for i in range(0,len(UES)):
-        if i in [0,1,2,3,11,19]:    
+        if (i+1) in [3,5,10,17,19]:
             print("the power history of %d-th is"% UES[i].num, UES[i].powhis)
             data_x = [j for j in range(0,len(UES[i].powhis))]
             # round_x = range(len(UES[j].powhis))
@@ -235,10 +248,12 @@ def topology():
     round = [k for k in range(0,20)]
     plt.plot(round, FBS, marker='o', label="$U_{BS}$")
     plt.plot(round, FFD, marker='*', label="$U_{FD}$")
-    
-    # for i in range(0,len(UES)):
-    #     plt.annotate(NFD[i], (round[i], FBS[i]))
-    #     plt.annotate(NFD[i], (round[i], FFD[i]))
+
+    #查看每一轮选择的设备
+    for i in range(0,len(UES)):
+        plt.annotate(NFD[i], (round[i], FBS[i]))
+        plt.annotate(NFD[i], (round[i], FFD[i]))
+
     labelx = range(1,21)
     plt.xticks(round,labelx,fontsize = 14)
     plt.xlabel('round')

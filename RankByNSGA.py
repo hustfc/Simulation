@@ -208,7 +208,7 @@ def Rank(UES,queue):
     但是求解时不考虑
     '''
     pop_size = 20
-    max_gen = 100
+    max_gen = 20
     #初始化
     global min_x
     global max_x
